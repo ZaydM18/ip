@@ -1,12 +1,12 @@
 import java.util.Scanner;
+import java.util.ArrayList;
 
 public class Monty {
     private static void printLine() {
         System.out.println("____________________________________________________________");
     }
     public static void main(String[] args) {
-        Task[] tasks = new Task[100];
-        int taskCount = 0;
+        ArrayList<Task> tasks = new ArrayList<>();
         Scanner sc = new Scanner(System.in);
 
         printLine();
@@ -23,77 +23,91 @@ public class Monty {
 
                 switch (command) {
                     case "bye":
-                        printLine();
                         System.out.println(" Bye. Hope to see you again soon!");
                         printLine();
                         return;
 
                     case "list":
                         System.out.println(" Here are the tasks in your list:");
-                        for (int i = 0; i < taskCount; i++) {
-                            System.out.println("  " + (i + 1) + ". " + tasks[i]);
+                        for (int i = 0; i < tasks.size(); i++) {
+                            System.out.println("  " + (i + 1) + ". " + tasks.get(i));
                         }
-                        printLine();
                         break;
 
                     case "mark":
                         if (argument.isEmpty()) throw new MontyException(" Your task number is out of range! How am I to keep track of my-- I mean, your -- beautiful list!");
                         int markIndex = Integer.parseInt(argument) - 1;
-                        if (markIndex < 0 || markIndex >= taskCount) throw new MontyException(" Your task number is out of range!");
-                        tasks[markIndex].markAsDone();
-                        System.out.println(" Nice! I've marked this task as done:");
-                        System.out.println("   " + tasks[markIndex]);
+                        if (markIndex < 0 || markIndex >= tasks.size()) throw new MontyException(" Your task number is out of range!");
+                        tasks.get(markIndex).markAsDone();
                         printLine();
+                        System.out.println(" Nice! I've marked this task as done:");
+                        System.out.println("   " + tasks.get(markIndex));
                         break;
 
                     case "unmark":
                         if (argument.isEmpty()) throw new MontyException(" Your task number is out of range! How am I to keep track of my-- I mean, your -- beautiful list!");
                         int unmarkIndex = Integer.parseInt(argument) - 1;
-                        if (unmarkIndex < 0 || unmarkIndex >= taskCount) throw new MontyException(" Your task number is out of range!");
-                        tasks[unmarkIndex].markAsNotDone();
+                        if (unmarkIndex < 0 || unmarkIndex >= tasks.size()) throw new MontyException(" Your task number is out of range!");
+                        tasks.get(unmarkIndex).markAsNotDone();
                         System.out.println(" OK, I've marked this task as not done yet:");
-                        System.out.println("   " + tasks[unmarkIndex]);
+                        System.out.println("   " + tasks.get(unmarkIndex));
+                        printLine();
                         break;
 
                     case "todo":
                         if (argument.isEmpty()) throw new MontyException("Huh? You just left that description blank, friend. How can one make a list with this?");
-                        tasks[taskCount++] = new ToDo(argument);
+                        tasks.add(new ToDo(argument));
                         System.out.println(" Got it. I've added this task:");
-                        System.out.println("   " + tasks[taskCount - 1]);
-                        System.out.println(" Now you have " + taskCount + " tasks in the list.");
+                        System.out.println("   " + tasks.get(tasks.size() - 1));
+                        System.out.println("  Now you have " + tasks.size() + " tasks in the list.");
                         printLine();
                         break;
 
                     case "deadline":
                         if (!argument.contains(" /by ")) throw new MontyException("Deadlines must include a '/by' followed by a due date. Hopefully there's no deadline on how long I can keep making lists...");
                         String[] deadlineParts = argument.split(" /by ", 2);
-                        tasks[taskCount++] = new Deadline(deadlineParts[0], deadlineParts[1]);
+                        tasks.add(new Deadline(deadlineParts[0], deadlineParts[1]));
                         System.out.println(" Got it. I've added this task:");
-                        System.out.println("   " + tasks[taskCount - 1]);
-                        System.out.println(" Now you have " + taskCount + " tasks in the list.");
+                        System.out.println("   " + tasks.get(tasks.size() - 1));
+                        System.out.println("  Now you have " + tasks.size() + " tasks in the list.");
                         printLine();
                         break;
 
                     case "event":
                         if (!argument.contains(" /from ") || !argument.contains(" /to ")) throw new MontyException("Ah! Another error! MUST MAKE LIST! An event must include '/from' and '/to'");
                         String[] eventParts = argument.split(" /from | /to ", 3);
-                        tasks[taskCount++] = new Event(eventParts[0], eventParts[1], eventParts[2]);
+                        tasks.add(new Event(eventParts[0], eventParts[1], eventParts[2]));
                         System.out.println(" Got it. I've added this task:");
-                        System.out.println("   " + tasks[taskCount - 1]);
-                        System.out.println(" Now you have " + taskCount + " tasks in the list.");
+                        System.out.println("   " + tasks.get(tasks.size() - 1));
+                        System.out.println("  Now you have " + tasks.size() + " tasks in the list.");
+                        printLine();
+                        break;
+
+                    case "delete":
+                        if (argument.isEmpty()) throw new MontyException(" Your task number is out of range! How am I to keep track of my-- I mean, your -- beautiful list!");
+                        int deleteIndex = Integer.parseInt(argument) - 1;
+                        if (deleteIndex < 0 || deleteIndex >= tasks.size()) throw new MontyException(" Your task number is out of range!");
+                        Task removedTask = tasks.remove(deleteIndex);
+                        System.out.println(" Noted. I've removed this task:");
+                        System.out.println("   " + removedTask);
+                        System.out.println("  Now you have " + tasks.size() + " tasks in the list.");
                         printLine();
                         break;
 
                     default:
-                        throw new MontyException("What are you saying? Please tell me again. I must add it to the list!");
+                        printLine();
+                        System.out.println(" What are you saying? Please tell me again. I must add it to the list!");
+                        printLine();
                 }
 
             } catch (MontyException e) {
                 printLine();
                 System.out.println(" " + e.getMessage());
+
             } catch (NumberFormatException e) {
                 printLine();
                 System.out.println(" Your task number is out of range! How am I to keep track of my-- I mean, your -- beautiful list!");
+
             }
         }
         sc.close();
