@@ -2,35 +2,36 @@ ____________________________________________________________
  Hello! I'm Monty
  What can I do for you?
 ____________________________________________________________
-____________________________________________________________
  Got it. I've added this task:
-   [T][ ] borrow book
+   [T][ ] read book
  Now you have 1 tasks in the list.
-____________________________________________________________
 ____________________________________________________________
  Got it. I've added this task:
    [D][ ] return book (by: Sunday)
  Now you have 2 tasks in the list.
 ____________________________________________________________
-____________________________________________________________
  Got it. I've added this task:
    [E][ ] project meeting (from: Mon 2pm to: 4pm)
  Now you have 3 tasks in the list.
 ____________________________________________________________
-____________________________________________________________
  Here are the tasks in your list:
- 1. [T][ ] borrow book
- 2. [D][ ] return book (by: Sunday)
- 3. [E][ ] project meeting (from: Mon 2pm to: 4pm)
-____________________________________________________________
+  1. [T][ ] read book
+  2. [D][ ] return book (by: Sunday)
+  3. [E][ ] project meeting (from: Mon 2pm to: 4pm)
 ____________________________________________________________
  Nice! I've marked this task as done:
    [D][X] return book (by: Sunday)
 ____________________________________________________________
-____________________________________________________________
  OK, I've marked this task as not done yet:
    [D][ ] return book (by: Sunday)
 ____________________________________________________________
+ What are you saying? Please tell me again. I must add it to the list!
+____________________________________________________________
+ Huh? You just left that description blank, friend. How can one make a list with this?
+____________________________________________________________
+ Deadlines must include a '/by' followed by a due date. Hopefully there's no deadline on how long I can keep making lists...
+____________________________________________________________
+ Ah! Another error! MUST MAKE LIST! An event must include '/from' and '/to'
 ____________________________________________________________
  Bye. Hope to see you again soon!
 ____________________________________________________________
