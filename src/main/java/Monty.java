@@ -14,7 +14,7 @@ public class Monty {
         System.out.println(" What can I do for you?");
         printLine();
 
-        while (true) {
+        while (sc.hasNextLine()) {
             String userInput = sc.nextLine().trim();
 
             if (userInput.equalsIgnoreCase("bye")) {
