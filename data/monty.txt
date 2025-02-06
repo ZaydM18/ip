@@ -1,3 +1,4 @@
 E | 0 | meeting | 2024-06-01 1400 | 2024-06-01 1600
-D | 0 | return book | 2024-06-01 1800
+D | 1 | return book | 2024-06-01 1800
 T | 0 | Dark Souls IV
+T | 0 | Dark Souls 3
