@@ -4,6 +4,7 @@ import monty.parser.Parser;
 import monty.storage.Storage;
 import monty.task.Task;
 import monty.ui.Ui;
+import monty.exception.MontyException;
 import java.util.ArrayList;
 
 public class Monty {
@@ -17,13 +18,20 @@ public class Monty {
 
     public void run() {
         ui.showWelcome();
+
         while (true) {
             String userInput = ui.readCommand();
             if (userInput.equals("bye")) {
                 break;
             }
-            Parser.processCommand(userInput, tasks, ui);
+
+            try {
+                Parser.processCommand(userInput, tasks, ui);
+            } catch (MontyException e) {
+                ui.showError(e.getMessage());
+            }
         }
+
         ui.showGoodbye();
         ui.close();
     }

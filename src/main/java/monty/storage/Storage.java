@@ -20,10 +20,13 @@ public class Storage {
     private static final String FILE_PATH = "./data/monty.txt";
     private static final String DIRECTORY_PATH = "./data";
 
+
     public static void saveTasks(ArrayList<Task> tasks) {
         try {
             File dir = new File(DIRECTORY_PATH);
-            if (!dir.exists()) dir.mkdirs();
+            if (!dir.exists()) {
+                dir.mkdirs();
+            }
             BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_PATH));
             for (Task task : tasks) {
                 writer.write(task.toFileString() + "\n");
@@ -37,13 +40,17 @@ public class Storage {
     public static ArrayList<Task> loadTasks() {
         ArrayList<Task> tasks = new ArrayList<>();
         File file = new File(FILE_PATH);
-        if (!file.exists()) return tasks;
+        if (!file.exists()) {
+            return tasks;
+        }
 
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 Task task = parseTask(line);
-                if (task != null) tasks.add(task);
+                if (task != null) {
+                    tasks.add(task);
+                }
             }
         } catch (IOException e) {
             System.out.println(" Error loading tasks.");

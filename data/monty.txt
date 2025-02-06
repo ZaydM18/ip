@@ -1,7 +1,3 @@
-E | 0 | meeting | 2024-06-01 1400 | 2024-06-01 1600
-D | 1 | return book | 2024-06-01 1800
-T | 0 | Dark Souls IV
-T | 0 | Dark Souls
-D | 0 | book | 2025-08-21 2145
-E | 0 | team meeting | 2024-06-05 1400 | 2024-06-05 1600
-E | 0 | team meeting | 2024-06-05 1400 | 2024-06-05 1600
+T | 0 | Test saving
+T | 0 | Read Book
+T | 0 | Read Book
