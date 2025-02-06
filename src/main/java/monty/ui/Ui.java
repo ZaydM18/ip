@@ -1,4 +1,6 @@
-package monty;
+package monty.ui;
+
+import monty.task.Task;
 
 import java.util.Scanner;
 import java.time.LocalDate;

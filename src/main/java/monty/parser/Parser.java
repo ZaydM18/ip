@@ -1,5 +1,9 @@
-package monty;
+package monty.parser;
 
+import monty.exception.MontyException;
+import monty.storage.Storage;
+import monty.task.*;
+import monty.ui.Ui;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -45,7 +49,9 @@ public class Parser {
                     break;
 
                 case "deadline":
-                    if (!argument.contains(" /by ")) throw new MontyException("Deadlines must include a '/by' followed by a date and time (yyyy-MM-dd HHmm).");
+                    if (!argument.contains(" /by "))  {
+                        throw new MontyException("Deadlines must include a '/by' followed by a date and time (yyyy-MM-dd HHmm).");
+                    }
                     String[] deadlineParts = argument.split(" /by ", 2);
                     Task newDeadline = new Deadline(deadlineParts[0], deadlineParts[1]);
                     tasks.add(newDeadline);
@@ -54,7 +60,9 @@ public class Parser {
                     break;
 
                 case "event":
-                    if (!argument.contains(" /from ") || !argument.contains(" /to ")) throw new MontyException("Events must include '/from' and '/to' with a date and time (yyyy-MM-dd HHmm).");
+                    if (!argument.contains(" /from ") || !argument.contains(" /to ")) {
+                        throw new MontyException("Events must include '/from' and '/to' with a date and time (yyyy-MM-dd HHmm).");
+                    }
                     String[] eventParts = argument.split(" /from | /to ", 3);
                     Task newEvent = new Event(eventParts[0], eventParts[1], eventParts[2]);
                     tasks.add(newEvent);
@@ -86,14 +94,20 @@ public class Parser {
     }
 
     private static int validateTaskIndex(String argument, int size) throws MontyException {
-        if (argument.isEmpty()) throw new MontyException(" Your task number is out of range!");
+        if (argument.isEmpty()) {
+            throw new MontyException(" Your task number is out of range!");
+        }
         int index = Integer.parseInt(argument) - 1;
-        if (index < 0 || index >= size) throw new MontyException(" Your task number is out of range!");
+        if (index < 0 || index >= size) {
+            throw new MontyException(" Your task number is out of range!");
+        }
         return index;
     }
 
     private static void processDateCommand(String argument, ArrayList<Task> tasks, Ui ui) throws MontyException {
-        if (argument.isEmpty()) throw new MontyException(" Please provide a date in yyyy-MM-dd format.");
+        if (argument.isEmpty()) {
+            throw new MontyException(" Please provide a date in yyyy-MM-dd format.");
+        }
         try {
             LocalDate targetDate = LocalDate.parse(argument, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
             ArrayList<Task> matchingTasks = new ArrayList<>();

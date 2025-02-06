@@ -1,4 +1,4 @@
-package monty;
+package monty.task;
 
 public abstract class Task {
     protected String description;
@@ -17,7 +17,7 @@ public abstract class Task {
         this.isDone = false;
     }
 
-    protected void setDone(boolean done) {
+    public void setDone(boolean done) {
         this.isDone = done;
     }
 

@@ -1,8 +1,10 @@
-import java.util.Scanner;
+package monty;
+
+import monty.parser.Parser;
+import monty.storage.Storage;
+import monty.task.Task;
+import monty.ui.Ui;
 import java.util.ArrayList;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 
 public class Monty {
     private final Ui ui;
@@ -17,7 +19,9 @@ public class Monty {
         ui.showWelcome();
         while (true) {
             String userInput = ui.readCommand();
-            if (userInput.equals("bye")) break;
+            if (userInput.equals("bye")) {
+                break;
+            }
             Parser.processCommand(userInput, tasks, ui);
         }
         ui.showGoodbye();
