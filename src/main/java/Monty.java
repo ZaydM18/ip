@@ -5,8 +5,9 @@ public class Monty {
     private static void printLine() {
         System.out.println("____________________________________________________________");
     }
+
     public static void main(String[] args) {
-        ArrayList<Task> tasks = new ArrayList<>();
+        ArrayList<Task> tasks = Storage.loadTasks();
         Scanner sc = new Scanner(System.in);
 
         printLine();
@@ -24,6 +25,7 @@ public class Monty {
                 switch (command) {
                     case "bye":
                         System.out.println(" Bye. Hope to see you again soon!");
+                        Storage.saveTasks(tasks);
                         printLine();
                         return;
 
@@ -39,9 +41,9 @@ public class Monty {
                         int markIndex = Integer.parseInt(argument) - 1;
                         if (markIndex < 0 || markIndex >= tasks.size()) throw new MontyException(" Your task number is out of range!");
                         tasks.get(markIndex).markAsDone();
-                        printLine();
                         System.out.println(" Nice! I've marked this task as done:");
                         System.out.println("   " + tasks.get(markIndex));
+                        Storage.saveTasks(tasks);
                         break;
 
                     case "unmark":
@@ -51,7 +53,7 @@ public class Monty {
                         tasks.get(unmarkIndex).markAsNotDone();
                         System.out.println(" OK, I've marked this task as not done yet:");
                         System.out.println("   " + tasks.get(unmarkIndex));
-                        printLine();
+                        Storage.saveTasks(tasks);
                         break;
 
                     case "todo":
@@ -60,7 +62,7 @@ public class Monty {
                         System.out.println(" Got it. I've added this task:");
                         System.out.println("   " + tasks.get(tasks.size() - 1));
                         System.out.println("  Now you have " + tasks.size() + " tasks in the list.");
-                        printLine();
+                        Storage.saveTasks(tasks);
                         break;
 
                     case "deadline":
@@ -70,7 +72,7 @@ public class Monty {
                         System.out.println(" Got it. I've added this task:");
                         System.out.println("   " + tasks.get(tasks.size() - 1));
                         System.out.println("  Now you have " + tasks.size() + " tasks in the list.");
-                        printLine();
+                        Storage.saveTasks(tasks);
                         break;
 
                     case "event":
@@ -80,7 +82,7 @@ public class Monty {
                         System.out.println(" Got it. I've added this task:");
                         System.out.println("   " + tasks.get(tasks.size() - 1));
                         System.out.println("  Now you have " + tasks.size() + " tasks in the list.");
-                        printLine();
+                        Storage.saveTasks(tasks);
                         break;
 
                     case "delete":
@@ -91,7 +93,7 @@ public class Monty {
                         System.out.println(" Noted. I've removed this task:");
                         System.out.println("   " + removedTask);
                         System.out.println("  Now you have " + tasks.size() + " tasks in the list.");
-                        printLine();
+                        Storage.saveTasks(tasks);
                         break;
 
                     default:

@@ -1,4 +1,4 @@
-public class Task {
+public abstract class Task {
     protected String description;
     protected boolean isDone;
 
@@ -15,6 +15,10 @@ public class Task {
         this.isDone = false;
     }
 
+    protected void setDone(boolean done) {
+        this.isDone = done;
+    }
+
     public String getStatusIcon() {
         return (isDone ? "X" : " ");
     }
@@ -22,6 +26,8 @@ public class Task {
     public String getDescription() {
         return description;
     }
+
+    public abstract String toFileString();
 
     @Override
     public String toString() {
