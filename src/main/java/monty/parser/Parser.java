@@ -9,7 +9,21 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 
+/**
+ * Parses and processes user commands, executing the appropriate actions.
+ * This class handles task management operations such as adding, deleting, marking,
+ * unmarking, and finding tasks, as well as interacting with the user interface.
+ */
 public class Parser {
+
+    /**
+     * Processes the user input and executes the corresponding command.
+     *
+     * @param userInput The input string entered by the user.
+     * @param tasks The list of tasks currently stored.
+     * @param ui The user interface for displaying messages.
+     * @throws MontyException If an invalid command is entered or required arguments are missing.
+     */
     public static void processCommand(String userInput, ArrayList<Task> tasks, Ui ui) throws MontyException {
         String[] words = userInput.split(" ", 2);
         String command = words[0];
@@ -94,6 +108,10 @@ public class Parser {
                 break;
             }
 
+            case "find":
+                processFindCommand(argument, tasks, ui);
+                break;
+
             default: {
                 throw new MontyException("What are you saying? Please tell me again. I must add it to the list!");
             }
@@ -142,5 +160,33 @@ public class Parser {
         } catch (DateTimeParseException e) {
             throw new MontyException(" Invalid date format! Please use yyyy-MM-dd.");
         }
+    }
+
+    /**
+     * Finds tasks that contain the given keyword in their description.
+     *
+     * @param keyword The keyword to search for.
+     * @param tasks   The list of tasks to search in.
+     * @param ui      The UI component to display results.
+     */
+    private static void processFindCommand(String keyword, ArrayList<Task> tasks, Ui ui) throws MontyException {
+        if (keyword.isEmpty()) {
+            throw new MontyException("You must provide a keyword to search for.");
+        }
+
+        ArrayList<Task> matchingTasks = new ArrayList<>();
+
+        for (Task task : tasks) {
+            if (task.getDescription().contains(keyword)) {
+                matchingTasks.add(task);
+            }
+        }
+
+        if (matchingTasks.isEmpty()) {
+            ui.showError("No matching tasks found.");
+            return;
+        }
+
+        ui.showFoundTasks(matchingTasks);
     }
 }
