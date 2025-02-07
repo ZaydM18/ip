@@ -7,7 +7,7 @@ package monty.task;
 public abstract class Task {
     protected String description;
     protected boolean isDone;
-
+    
     /**
      * Constructs a new Task with the given description.
      * The task is initially marked as not done.
