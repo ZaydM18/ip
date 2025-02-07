@@ -9,7 +9,19 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 
+/**
+ * The {@code Parser} class is responsible for parsing and processing user commands.
+ */
 public class Parser {
+
+    /**
+     * Processes user input and executes the corresponding command.
+     *
+     * @param userInput The raw user input string.
+     * @param tasks The list of current tasks.
+     * @param ui The UI handler for displaying messages.
+     * @throws MontyException If the input is invalid.
+     */
     public static void processCommand(String userInput, ArrayList<Task> tasks, Ui ui) throws MontyException {
         String[] words = userInput.split(" ", 2);
         String command = words[0];
@@ -47,7 +59,6 @@ public class Parser {
                 if (argument.isEmpty()) {
                     throw new MontyException("Huh? You just left that description blank, friend. How can one make a list with this?");
                 }
-
                 Task newToDo = new ToDo(argument);
                 tasks.add(newToDo);
                 ui.showTaskAdded(newToDo, tasks.size());
@@ -59,7 +70,6 @@ public class Parser {
                 if (!argument.contains(" /by ")) {
                     throw new MontyException("Deadlines must include a '/by' followed by a date and time (yyyy-MM-dd HHmm).");
                 }
-
                 String[] deadlineParts = argument.split(" /by ", 2);
                 Task newDeadline = new Deadline(deadlineParts[0], deadlineParts[1]);
                 tasks.add(newDeadline);
@@ -72,7 +82,6 @@ public class Parser {
                 if (!argument.contains(" /from ") || !argument.contains(" /to ")) {
                     throw new MontyException("Events must include '/from' and '/to' with a date and time (yyyy-MM-dd HHmm).");
                 }
-
                 String[] eventParts = argument.split(" /from | /to ", 3);
                 Task newEvent = new Event(eventParts[0], eventParts[1], eventParts[2]);
                 tasks.add(newEvent);
@@ -100,25 +109,37 @@ public class Parser {
         }
     }
 
+    /**
+     * Validates the task index provided by the user.
+     *
+     * @param argument The user-provided task index.
+     * @param size The current size of the task list.
+     * @return The validated task index.
+     * @throws MontyException If the index is out of range or invalid.
+     */
     private static int validateTaskIndex(String argument, int size) throws MontyException {
         if (argument.isEmpty()) {
             throw new MontyException(" Your task number is out of range!");
         }
-
         int index = Integer.parseInt(argument) - 1;
-
         if (index < 0 || index >= size) {
             throw new MontyException(" Your task number is out of range!");
         }
-
         return index;
     }
 
+    /**
+     * Processes the 'date' command by filtering and displaying tasks on a specified date.
+     *
+     * @param argument The date provided by the user in 'yyyy-MM-dd' format.
+     * @param tasks The list of current tasks.
+     * @param ui The UI handler for displaying messages.
+     * @throws MontyException If the date format is invalid.
+     */
     private static void processDateCommand(String argument, ArrayList<Task> tasks, Ui ui) throws MontyException {
         if (argument.isEmpty()) {
             throw new MontyException(" Please provide a date in yyyy-MM-dd format.");
         }
-
         try {
             LocalDate targetDate = LocalDate.parse(argument, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
             ArrayList<Task> matchingTasks = new ArrayList<>();

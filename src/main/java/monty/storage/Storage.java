@@ -16,11 +16,18 @@ import java.util.ArrayList;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * Handles the loading and saving of tasks to a file.
+ */
 public class Storage {
     private static final String FILE_PATH = "./data/monty.txt";
     private static final String DIRECTORY_PATH = "./data";
 
-
+    /**
+     * Saves the given list of tasks to a file.
+     *
+     * @param tasks The list of tasks to be saved.
+     */
     public static void saveTasks(ArrayList<Task> tasks) {
         try {
             File dir = new File(DIRECTORY_PATH);
@@ -37,6 +44,11 @@ public class Storage {
         }
     }
 
+    /**
+     * Loads tasks from a file.
+     *
+     * @return A list of tasks loaded from the file.
+     */
     public static ArrayList<Task> loadTasks() {
         ArrayList<Task> tasks = new ArrayList<>();
         File file = new File(FILE_PATH);
@@ -58,6 +70,12 @@ public class Storage {
         return tasks;
     }
 
+    /**
+     * Parses a task from a given line of text.
+     *
+     * @param line The line of text representing a task.
+     * @return The parsed Task object, or null if the line is corrupted.
+     */
     private static Task parseTask(String line) {
         try {
             String[] parts = line.split(" \\| ");
