@@ -1,11 +1,5 @@
 package monty.storage;
 
-import monty.task.Task;
-import monty.task.ToDo;
-import monty.task.Deadline;
-import monty.task.Event;
-import monty.exception.MontyException;
-
 import java.io.File;
 import java.io.FileWriter;
 import java.io.FileReader;
@@ -13,31 +7,49 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
+import monty.task.Task;
+import monty.task.ToDo;
+import monty.task.Deadline;
+import monty.task.Event;
+import monty.exception.MontyException;
+
+/**
+ * Handles saving and loading of tasks to and from a file.
+ */
 public class Storage {
     private static final String FILE_PATH = "./data/monty.txt";
     private static final String DIRECTORY_PATH = "./data";
 
+    /**
+     * Saves the list of tasks to a file.
+     *
+     * @param tasks The list of tasks to be saved.
+     * @throws MontyException If there is an error writing to the file.
+     */
+    public static void saveTasks(ArrayList<Task> tasks) throws MontyException {
+        File dir = new File(DIRECTORY_PATH);
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
 
-    public static void saveTasks(ArrayList<Task> tasks) {
-        try {
-            File dir = new File(DIRECTORY_PATH);
-            if (!dir.exists()) {
-                dir.mkdirs();
-            }
-            BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_PATH));
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_PATH))) {
             for (Task task : tasks) {
                 writer.write(task.toFileString() + "\n");
             }
-            writer.close();
         } catch (IOException e) {
-            System.out.println(" Error saving tasks.");
+            throw new MontyException("Error saving tasks.");
         }
     }
 
-    public static ArrayList<Task> loadTasks() {
+    /**
+     * Loads the list of tasks from a file.
+     *
+     * @return The list of tasks read from the file.
+     * @throws MontyException If there is an error reading the file.
+     */
+    public static ArrayList<Task> loadTasks() throws MontyException {
         ArrayList<Task> tasks = new ArrayList<>();
         File file = new File(FILE_PATH);
         if (!file.exists()) {
@@ -47,24 +59,34 @@ public class Storage {
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             String line;
             while ((line = reader.readLine()) != null) {
-                Task task = parseTask(line);
-                if (task != null) {
-                    tasks.add(task);
-                }
+                tasks.add(parseTask(line));
             }
         } catch (IOException e) {
-            System.out.println(" Error loading tasks.");
+            throw new MontyException("Error loading tasks.");
         }
+
         return tasks;
     }
 
-    private static Task parseTask(String line) {
-        try {
-            String[] parts = line.split(" \\| ");
-            String type = parts[0];
-            boolean isDone = parts[1].equals("1");
-            String description = parts[2];
+    /**
+     * Parses a task from a line of text.
+     *
+     * @param line The line containing task data.
+     * @return The parsed Task object.
+     * @throws MontyException If the line is corrupted or has an invalid format.
+     */
+    private static Task parseTask(String line) throws MontyException {
+        String[] parts = line.split(" \\| ");
 
+        if (parts.length < 3) {
+            throw new MontyException("Corrupted task data: " + line);
+        }
+
+        String type = parts[0];
+        boolean isDone = parts[1].equals("1");
+        String description = parts[2];
+
+        try {
             Task task;
             switch (type) {
                 case "T":
@@ -77,15 +99,13 @@ public class Storage {
                     task = new Event(description, parts[3], parts[4]);
                     break;
                 default:
-                    System.out.println(" Warning: Corrupted line skipped: " + line);
-                    return null;
+                    throw new MontyException("Unknown task type in data: " + type);
             }
 
             task.setDone(isDone);
             return task;
-        } catch (Exception e) {
-            System.out.println(" Warning: Corrupted line skipped: " + line);
-            return null;
+        } catch (ArrayIndexOutOfBoundsException | DateTimeParseException e) {
+            throw new MontyException("Corrupted task data: " + line);
         }
     }
 }
