@@ -5,6 +5,7 @@ import monty.task.Task;
 import java.util.Scanner;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 
 public class Ui {
     private final Scanner sc;
@@ -78,6 +79,18 @@ public class Ui {
         System.out.println(" Here are the deadlines and events on " + date.format(DateTimeFormatter.ofPattern("MMM dd yyyy")) + ":");
         for (Task task : tasks) {
             System.out.println("  " + task);
+        }
+    }
+
+    /**
+     * Displays the tasks that match the given keyword search.
+     *
+     * @param matchingTasks The list of tasks that contain the search keyword.
+     */
+    public void showFoundTasks(ArrayList<Task> matchingTasks) {
+        System.out.println("Here are the matching tasks in your list:");
+        for (int i = 0; i < matchingTasks.size(); i++) {
+            System.out.println((i + 1) + "." + matchingTasks.get(i));
         }
     }
 }
