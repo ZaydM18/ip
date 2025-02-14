@@ -187,6 +187,8 @@ public class Parser {
             return;
         }
 
-        ui.showFoundTasks(matchingTasks);
+        // Convert ArrayList to an array and pass it to showFoundTasks
+        ui.showFoundTasks(matchingTasks.toArray(new Task[0]));
     }
+
 }

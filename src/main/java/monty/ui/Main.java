@@ -1,28 +1,39 @@
-package monty;
+package monty.ui;
 
 import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+import javafx.scene.image.Image;
+
+import java.io.IOException;
+import java.util.ArrayList;
+
+import monty.Monty;
+import monty.task.Task;
 
 /**
- * The main entry point for the Monty chatbot GUI application.
+ * The main entry point for the Monty GUI application.
  */
 public class Main extends Application {
+    private Monty monty;
+    private ArrayList<Task> tasks;
+    private Image userImage = new Image(this.getClass().getResourceAsStream("/images/DaUser.jpg"));
+    private Image montyImage = new Image(this.getClass().getResourceAsStream("/images/DaDuke.png"));
 
     @Override
-    public void start(Stage stage) {
-        Label label = new Label("Hello! I'm Monty, your chatbot.");
-        StackPane layout = new StackPane(label);
-        Scene scene = new Scene(layout, 400, 300);
+    public void start(Stage stage) throws IOException {
+        monty = new Monty();
+        tasks = new ArrayList<>();
 
-        stage.setTitle("Monty Chatbot");
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/MainWindow.fxml"));
+        Scene scene = new Scene(fxmlLoader.load());
+
+        MainWindow controller = fxmlLoader.getController();
+        controller.setMonty(monty, userImage, montyImage);
+
         stage.setScene(scene);
+        stage.setTitle("Monty Chatbot");
         stage.show();
-    }
-
-    public static void main(String[] args) {
-        launch(args);
     }
 }
