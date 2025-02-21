@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import javafx.fxml.FXML;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 import javafx.scene.image.Image;
@@ -35,10 +36,30 @@ public class MainWindow {
     @FXML
     private ScrollPane scrollPane;
 
+    @FXML
+    private AnchorPane mainPane;
+
     private Monty monty;
     private ArrayList<Task> tasks;
     private Image userImage;
     private Image montyImage;
+
+    /**
+     * Initializes the UI styles when the application starts.
+     * This method is automatically called after the FXML file is loaded.
+     * It applies pixel font and text color styling
+     * to ensure consistency across the chatbot interface.
+     */
+    @FXML
+    public void initialize() {
+        System.out.println("✅ Initialize method called. Checking styles...");
+
+        dialogContainer.setStyle("-fx-background-color: transparent;");
+
+        scrollPane.setStyle("-fx-background: transparent; -fx-background-color: transparent;");
+
+        mainPane.layout();
+    }
 
     /**
      * Initializes the application with a reference to Monty, its tasks, and user/chatbot images.

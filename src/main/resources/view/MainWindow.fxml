@@ -8,7 +8,13 @@
 
 <AnchorPane xmlns="http://javafx.com/javafx/8.0.171"
             xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="monty.ui.MainWindow">
+            fx:controller="monty.ui.MainWindow"
+            fx:id="mainPane"
+            style="-fx-background-color: linear-gradient(from 0% 0% to 100% 100%,
+                     rgba(0,0,176,1) 0%,
+                     rgba(0,0,128,1) 33%,
+                     rgba(0,0,80,1) 66%,
+                     rgba(0,0,32,1) 100%);">
 
     <children>
         <ScrollPane fx:id="scrollPane"
@@ -18,26 +24,31 @@
                     prefWidth="600.0"
                     fitToWidth="true"
                     hbarPolicy="NEVER"
-                    vbarPolicy="ALWAYS">
+                    vbarPolicy="ALWAYS"
+                    style="-fx-background: transparent; -fx-background-color: transparent;">
             <content>
                 <VBox fx:id="dialogContainer"
                       spacing="10"
                       alignment="TOP_LEFT"
-                      prefWidth="580.0"/>
+                      prefWidth="580.0"
+                      style="-fx-background-color: transparent;"/>
             </content>
         </ScrollPane>
 
         <TextField fx:id="userInput"
-                   layoutY="420"
+                   layoutX="10"
+                   layoutY="430"
                    prefHeight="30.0"
-                   prefWidth="500.0"/>
+                   prefWidth="500.0"
+                   style="-fx-background-color: black; -fx-text-fill: white; -fx-border-color: white; -fx-border-width: 2;"/>
 
         <Button fx:id="sendButton"
                 text="Send"
-                layoutX="510"
-                layoutY="420"
+                layoutX="520"
+                layoutY="430"
                 prefHeight="30.0"
                 prefWidth="80.0"
-                onAction="#handleUserInput"/>
+                onAction="#handleUserInput"
+                style="-fx-background-color: black; -fx-text-fill: white; -fx-border-color: white; -fx-border-width: 2;"/>
     </children>
 </AnchorPane>

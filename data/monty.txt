@@ -1,11 +1,5 @@
-T | 0 | Archimedes Principle
-T | 0 | Dark Souls 2
-T | 0 | Final Fantasy XII
-T | 0 | Fire Emblem Engage
-T | 0 | Test saving
+T | 0 | Dark Souls
+T | 0 | Elden Ring
+D | 0 | Demon Copperhead | 2025-03-21 2359
 D | 0 | The City & The City | 2025-03-25 1800
-D | 0 | Planescape Torment | 2025-03-25 1900
-D | 0 | Demon Copperhead | 2025-03-25 2000
-E | 0 | Brunch with family | 2025-02-21 1200 | 2025-02-21 1300
-E | 0 | Lunch with family | 2025-02-21 1400 | 2025-02-21 1600
-E | 0 | Lunch with family | 2025-02-21 1400 | 2025-02-21 1600
+E | 1 | Lunch with family | 2025-02-21 1400 | 2025-02-21 1600
