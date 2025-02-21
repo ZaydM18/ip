@@ -52,7 +52,6 @@ public class MainWindow {
      */
     @FXML
     public void initialize() {
-        System.out.println("✅ Initialize method called. Checking styles...");
 
         dialogContainer.setStyle("-fx-background-color: transparent;");
 
