@@ -1,16 +1,16 @@
 package monty.ui;
 
+import monty.Monty;
+import monty.task.Task;
+
+import java.io.IOException;
+import java.util.ArrayList;
+
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.scene.image.Image;
-
-import java.io.IOException;
-import java.util.ArrayList;
-
-import monty.Monty;
-import monty.task.Task;
 
 /**
  * The main entry point for the Monty GUI application.

@@ -9,8 +9,6 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
-import java.util.Comparator;
-
 
 /**
  * Parses and processes user commands, executing the appropriate actions.
@@ -23,8 +21,8 @@ public class Parser {
      * Processes the user input and executes the corresponding command.
      *
      * @param userInput The input string entered by the user.
-     * @param tasks The list of tasks currently stored.
-     * @param ui The user interface for displaying messages.
+     * @param tasks     The list of tasks currently stored.
+     * @param ui        The user interface for displaying messages.
      * @throws MontyException If an invalid command is entered or required arguments are missing.
      */
     public static void processCommand(String userInput, ArrayList<Task> tasks, Ui ui) throws MontyException {
@@ -62,7 +60,8 @@ public class Parser {
 
         case "todo": {
             if (argument.isEmpty()) {
-                throw new MontyException("Huh? You just left that description blank, friend. How can one make a list with this?");
+                throw new MontyException(
+                        "Huh? You just left that description blank, friend. How can one make a list with this?");
             }
 
             Task newToDo = new ToDo(argument);
@@ -74,7 +73,8 @@ public class Parser {
 
         case "deadline": {
             if (!argument.contains(" /by ")) {
-                throw new MontyException("Deadlines must include a '/by' followed by a date and time (yyyy-MM-dd HHmm).");
+                throw new MontyException(
+                        "Deadlines must include a '/by' followed by a date and time (yyyy-MM-dd HHmm).");
             }
 
             String[] deadlineParts = argument.split(" /by ", 2);
@@ -87,7 +87,8 @@ public class Parser {
 
         case "event": {
             if (!argument.contains(" /from ") || !argument.contains(" /to ")) {
-                throw new MontyException("Events must include '/from' and '/to' with a date and time (yyyy-MM-dd HHmm).");
+                throw new MontyException(
+                        "Events must include '/from' and '/to' with a date and time (yyyy-MM-dd HHmm).");
             }
 
             String[] eventParts = argument.split(" /from | /to ", 3);
@@ -111,49 +112,18 @@ public class Parser {
             break;
         }
 
-        case "find": {
+        case "find":
             processFindCommand(argument, tasks, ui);
             break;
-        }
 
-        case "sort": {
-            if (argument.equals("deadline")) {
-                tasks.sort((task1, task2) -> {
-                    if (task1 instanceof Deadline && task2 instanceof Deadline) {
-                        return Deadline.comparator.compare((Deadline) task1, (Deadline) task2);
-                    }
-                    return 0;
-                });
-                ui.showSortedTasks(tasks, "Deadlines sorted chronologically.");
-            } else if (argument.equals("event")) {
-                tasks.sort((task1, task2) -> {
-                    if (task1 instanceof Event && task2 instanceof Event) {
-                        return Event.comparator.compare((Event) task1, (Event) task2);
-                    }
-                    return 0;
-                });
-                ui.showSortedTasks(tasks, "Events sorted chronologically.");
-            } else if (argument.equals("todo")) {
-                tasks.sort((task1, task2) -> {
-                    if (task1 instanceof ToDo && task2 instanceof ToDo) {
-                        return ToDo.comparator.compare((ToDo) task1, (ToDo) task2);
-                    }
-                    return 0;
-                });
-                ui.showSortedTasks(tasks, "Todos sorted alphabetically.");
-            } else {
-                throw new MontyException("Invalid sort type. Use: sort deadline, sort event, or sort todo.");
-            }
-            Storage.saveTasks(tasks);
+        case "sort":
+            processSortCommand(argument, tasks, ui);
             break;
 
+        default: {
+            throw new MontyException("What are you saying? Please tell me again. I must add it to the list!");
         }
 
-
-
-        default: {
-                throw new MontyException("What are you saying? Please tell me again. I must add it to the list!");
-            }
         }
     }
 
@@ -185,7 +155,8 @@ public class Parser {
                     matchingTasks.add(task);
                 } else if (task instanceof Event) {
                     Event e = (Event) task;
-                    if (e.getStartDate().toLocalDate().equals(targetDate) || e.getEndDate().toLocalDate().equals(targetDate)) {
+                    if (e.getStartDate().toLocalDate().equals(targetDate)
+                            || e.getEndDate().toLocalDate().equals(targetDate)) {
                         matchingTasks.add(task);
                     }
                 }
@@ -228,5 +199,52 @@ public class Parser {
 
         ui.showFoundTasks(matchingTasks.toArray(new Task[0]));
     }
+
+    /**
+     * Sorts tasks based on the specified category (deadline, event, todo).
+     *
+     * @param argument The sorting category (deadline, event, or todo).
+     * @param tasks The list of tasks to be sorted.
+     * @param ui The UI component to display the sorted list.
+     * @throws MontyException If an invalid sorting category is provided.
+     */
+    private static void processSortCommand(String argument, ArrayList<Task> tasks, Ui ui) throws MontyException {
+        switch (argument) {
+        case "deadline":
+            tasks.sort((task1, task2) -> {
+                if (task1 instanceof Deadline && task2 instanceof Deadline) {
+                    return Deadline.comparator.compare((Deadline) task1, (Deadline) task2);
+                }
+                return 0;
+            });
+            ui.showSortedTasks(tasks, "Deadlines sorted chronologically.");
+            break;
+
+        case "event":
+            tasks.sort((task1, task2) -> {
+                if (task1 instanceof Event && task2 instanceof Event) {
+                    return Event.comparator.compare((Event) task1, (Event) task2);
+                }
+                return 0;
+            });
+            ui.showSortedTasks(tasks, "Events sorted chronologically.");
+            break;
+
+        case "todo":
+            tasks.sort((task1, task2) -> {
+                if (task1 instanceof ToDo && task2 instanceof ToDo) {
+                    return ToDo.comparator.compare((ToDo) task1, (ToDo) task2);
+                }
+                return 0;
+            });
+            ui.showSortedTasks(tasks, "Todos sorted alphabetically.");
+            break;
+
+        default:
+            throw new MontyException("Invalid sort type. Use: sort deadline, sort event, or sort todo.");
+        }
+        Storage.saveTasks(tasks);
+    }
+
 
 }

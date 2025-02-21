@@ -1,5 +1,16 @@
 package monty.ui;
 
+import monty.Monty;
+import monty.exception.MontyException;
+import monty.parser.Parser;
+import monty.storage.Storage;
+import monty.task.Task;
+
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+
 import javafx.fxml.FXML;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
@@ -7,15 +18,6 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 import javafx.scene.image.Image;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-
-import monty.Monty;
-import monty.exception.MontyException;
-import monty.parser.Parser;
-import monty.storage.Storage;
-import monty.task.Task;
 
 /**
  * Controller for MainWindow. Provides the layout for the main user interface.
@@ -53,10 +55,12 @@ public class MainWindow {
 
         try {
             this.tasks = Storage.loadTasks();
-            dialogContainer.getChildren().add(DialogBox.getMontyDialog("📂 Loaded previous tasks successfully!", montyImage));
+            dialogContainer.getChildren().add(DialogBox
+                    .getMontyDialog("📂 Loaded previous tasks successfully!", montyImage));
         } catch (MontyException e) {
             this.tasks = new ArrayList<>();
-            dialogContainer.getChildren().add(DialogBox.getMontyDialog("⚠ No saved tasks found. Starting fresh.", montyImage));
+            dialogContainer.getChildren().add(DialogBox
+                    .getMontyDialog("⚠ No saved tasks found. Starting fresh.", montyImage));
         }
     }
 
@@ -113,7 +117,8 @@ public class MainWindow {
 
                 @Override
                 public void showNoTasksFoundForDate() {
-                    capturedOutput.append("📅 No deadlines or events found on this date. Maybe you should make some?\n");
+                    capturedOutput
+                            .append("📅 No deadlines or events found on this date. Maybe you should make some?\n");
                 }
 
                 @Override

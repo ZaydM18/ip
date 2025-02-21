@@ -1,5 +1,11 @@
 package monty.storage;
 
+import monty.task.Task;
+import monty.task.ToDo;
+import monty.task.Deadline;
+import monty.task.Event;
+import monty.exception.MontyException;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.FileReader;
@@ -8,12 +14,6 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.time.format.DateTimeParseException;
-
-import monty.task.Task;
-import monty.task.ToDo;
-import monty.task.Deadline;
-import monty.task.Event;
-import monty.exception.MontyException;
 
 /**
  * Handles saving and loading of tasks to and from a file.
