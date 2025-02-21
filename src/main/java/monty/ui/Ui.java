@@ -162,4 +162,21 @@ public class Ui {
         }
     }
 
+    /**
+     * Displays the sorted list of tasks with an appropriate message.
+     *
+     * @param tasks   The list of tasks that have been sorted.
+     * @param message A message indicating the type of sorting performed.
+     */
+    public void showSortedTasks(ArrayList<Task> tasks, String message) {
+        System.out.println("🔽 " + message);
+        if (tasks.isEmpty()) {
+            System.out.println("There are no tasks to display.");
+            return;
+        }
+        for (int i = 0; i < tasks.size(); i++) {
+            System.out.println((i + 1) + ". " + tasks.get(i));
+        }
+    }
+
 }

@@ -1,5 +1,8 @@
 package monty.task;
 
+import java.util.Comparator;
+
+
 /**
  * Represents a ToDo task. A ToDo task contains only a description
  * and does not have a specific date or time associated with it.
@@ -14,6 +17,11 @@ public class ToDo extends Task {
     public ToDo(String description) {
         super(description);
     }
+
+    /**
+     * Comparator for sorting {@code ToDo} tasks alphabetically by description.
+     */
+    public static final Comparator<ToDo> comparator = Comparator.comparing(ToDo::getDescription);
 
     /**
      * Returns a formatted string representation of the ToDo task

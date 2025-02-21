@@ -4,10 +4,13 @@ import monty.exception.MontyException;
 import monty.storage.Storage;
 import monty.task.*;
 import monty.ui.Ui;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
+import java.util.Comparator;
+
 
 /**
  * Parses and processes user commands, executing the appropriate actions.
@@ -30,89 +33,125 @@ public class Parser {
         String argument = words.length > 1 ? words[1].trim() : "";
 
         switch (command) {
-            case "bye": {
-                ui.showGoodbye();
-                Storage.saveTasks(tasks);
-                return;
+        case "bye": {
+            ui.showGoodbye();
+            Storage.saveTasks(tasks);
+            return;
+        }
+
+        case "list": {
+            ui.showTaskList(tasks);
+            break;
+        }
+
+        case "mark": {
+            int markIndex = validateTaskIndex(argument, tasks.size());
+            tasks.get(markIndex).markAsDone();
+            ui.showTaskMarked(tasks.get(markIndex));
+            Storage.saveTasks(tasks);
+            break;
+        }
+
+        case "unmark": {
+            int unmarkIndex = validateTaskIndex(argument, tasks.size());
+            tasks.get(unmarkIndex).markAsNotDone();
+            ui.showTaskUnmarked(tasks.get(unmarkIndex));
+            Storage.saveTasks(tasks);
+            break;
+        }
+
+        case "todo": {
+            if (argument.isEmpty()) {
+                throw new MontyException("Huh? You just left that description blank, friend. How can one make a list with this?");
             }
 
-            case "list": {
-                ui.showTaskList(tasks);
-                break;
+            Task newToDo = new ToDo(argument);
+            tasks.add(newToDo);
+            ui.showTaskAdded(newToDo, tasks.size());
+            Storage.saveTasks(tasks);
+            break;
+        }
+
+        case "deadline": {
+            if (!argument.contains(" /by ")) {
+                throw new MontyException("Deadlines must include a '/by' followed by a date and time (yyyy-MM-dd HHmm).");
             }
 
-            case "mark": {
-                int markIndex = validateTaskIndex(argument, tasks.size());
-                tasks.get(markIndex).markAsDone();
-                ui.showTaskMarked(tasks.get(markIndex));
-                Storage.saveTasks(tasks);
-                break;
+            String[] deadlineParts = argument.split(" /by ", 2);
+            Task newDeadline = new Deadline(deadlineParts[0], deadlineParts[1]);
+            tasks.add(newDeadline);
+            ui.showTaskAdded(newDeadline, tasks.size());
+            Storage.saveTasks(tasks);
+            break;
+        }
+
+        case "event": {
+            if (!argument.contains(" /from ") || !argument.contains(" /to ")) {
+                throw new MontyException("Events must include '/from' and '/to' with a date and time (yyyy-MM-dd HHmm).");
             }
 
-            case "unmark": {
-                int unmarkIndex = validateTaskIndex(argument, tasks.size());
-                tasks.get(unmarkIndex).markAsNotDone();
-                ui.showTaskUnmarked(tasks.get(unmarkIndex));
-                Storage.saveTasks(tasks);
-                break;
+            String[] eventParts = argument.split(" /from | /to ", 3);
+            Task newEvent = new Event(eventParts[0], eventParts[1], eventParts[2]);
+            tasks.add(newEvent);
+            ui.showTaskAdded(newEvent, tasks.size());
+            Storage.saveTasks(tasks);
+            break;
+        }
+
+        case "date": {
+            processDateCommand(argument, tasks, ui);
+            break;
+        }
+
+        case "delete": {
+            int deleteIndex = validateTaskIndex(argument, tasks.size());
+            Task removedTask = tasks.remove(deleteIndex);
+            ui.showTaskDeleted(removedTask, tasks.size());
+            Storage.saveTasks(tasks);
+            break;
+        }
+
+        case "find": {
+            processFindCommand(argument, tasks, ui);
+            break;
+        }
+
+        case "sort": {
+            if (argument.equals("deadline")) {
+                tasks.sort((task1, task2) -> {
+                    if (task1 instanceof Deadline && task2 instanceof Deadline) {
+                        return Deadline.comparator.compare((Deadline) task1, (Deadline) task2);
+                    }
+                    return 0;
+                });
+                ui.showSortedTasks(tasks, "Deadlines sorted chronologically.");
+            } else if (argument.equals("event")) {
+                tasks.sort((task1, task2) -> {
+                    if (task1 instanceof Event && task2 instanceof Event) {
+                        return Event.comparator.compare((Event) task1, (Event) task2);
+                    }
+                    return 0;
+                });
+                ui.showSortedTasks(tasks, "Events sorted chronologically.");
+            } else if (argument.equals("todo")) {
+                tasks.sort((task1, task2) -> {
+                    if (task1 instanceof ToDo && task2 instanceof ToDo) {
+                        return ToDo.comparator.compare((ToDo) task1, (ToDo) task2);
+                    }
+                    return 0;
+                });
+                ui.showSortedTasks(tasks, "Todos sorted alphabetically.");
+            } else {
+                throw new MontyException("Invalid sort type. Use: sort deadline, sort event, or sort todo.");
             }
+            Storage.saveTasks(tasks);
+            break;
 
-            case "todo": {
-                if (argument.isEmpty()) {
-                    throw new MontyException("Huh? You just left that description blank, friend. How can one make a list with this?");
-                }
+        }
 
-                Task newToDo = new ToDo(argument);
-                tasks.add(newToDo);
-                ui.showTaskAdded(newToDo, tasks.size());
-                Storage.saveTasks(tasks);
-                break;
-            }
 
-            case "deadline": {
-                if (!argument.contains(" /by ")) {
-                    throw new MontyException("Deadlines must include a '/by' followed by a date and time (yyyy-MM-dd HHmm).");
-                }
 
-                String[] deadlineParts = argument.split(" /by ", 2);
-                Task newDeadline = new Deadline(deadlineParts[0], deadlineParts[1]);
-                tasks.add(newDeadline);
-                ui.showTaskAdded(newDeadline, tasks.size());
-                Storage.saveTasks(tasks);
-                break;
-            }
-
-            case "event": {
-                if (!argument.contains(" /from ") || !argument.contains(" /to ")) {
-                    throw new MontyException("Events must include '/from' and '/to' with a date and time (yyyy-MM-dd HHmm).");
-                }
-
-                String[] eventParts = argument.split(" /from | /to ", 3);
-                Task newEvent = new Event(eventParts[0], eventParts[1], eventParts[2]);
-                tasks.add(newEvent);
-                ui.showTaskAdded(newEvent, tasks.size());
-                Storage.saveTasks(tasks);
-                break;
-            }
-
-            case "date": {
-                processDateCommand(argument, tasks, ui);
-                break;
-            }
-
-            case "delete": {
-                int deleteIndex = validateTaskIndex(argument, tasks.size());
-                Task removedTask = tasks.remove(deleteIndex);
-                ui.showTaskDeleted(removedTask, tasks.size());
-                Storage.saveTasks(tasks);
-                break;
-            }
-
-            case "find":
-                processFindCommand(argument, tasks, ui);
-                break;
-
-            default: {
+        default: {
                 throw new MontyException("What are you saying? Please tell me again. I must add it to the list!");
             }
         }
@@ -187,7 +226,6 @@ public class Parser {
             return;
         }
 
-        // Convert ArrayList to an array and pass it to showFoundTasks
         ui.showFoundTasks(matchingTasks.toArray(new Task[0]));
     }
 

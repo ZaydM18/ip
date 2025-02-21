@@ -3,6 +3,8 @@ package monty.task;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.Comparator;
+
 
 /**
  * Represents a deadline task with a specific due date and time.
@@ -48,6 +50,11 @@ public class Deadline extends Task {
     public LocalDateTime getDate() {
         return by;
     }
+
+    /**
+     * Comparator for sorting {@code Deadline} tasks chronologically by due date.
+     */
+    public static final Comparator<Deadline> comparator = Comparator.comparing(Deadline::getDate);
 
     /**
      * Returns a formatted string representation of the deadline task

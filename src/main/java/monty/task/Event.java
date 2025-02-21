@@ -3,6 +3,8 @@ package monty.task;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.Comparator;
+
 
 /**
  * Represents an event task with a specific start and end time.
@@ -61,6 +63,11 @@ public class Event extends Task {
     public LocalDateTime getEndDate() {
         return to;
     }
+
+    /**
+     * Comparator for sorting {@code Event} tasks chronologically by start date.
+     */
+    public static final Comparator<Event> comparator = Comparator.comparing(Event::getStartDate);
 
     /**
      * Returns a formatted string representation of the event task

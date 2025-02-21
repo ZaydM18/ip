@@ -139,21 +139,27 @@ public class MainWindow {
                 }
 
                 @Override
+                public void showSortedTasks(ArrayList<Task> tasks, String message) {
+                    capturedOutput.append("🔽 ").append(message).append("\n");
+                    for (int i = 0; i < tasks.size(); i++) {
+                        capturedOutput.append((i + 1)).append(". ").append(tasks.get(i)).append("\n");
+                    }
+                }
+
+                @Override
                 public void showGoodbye() {
                     capturedOutput.append("👋 Bye. Hope to see you again soon!\n");
                 }
             };
 
-            try {
-                Parser.processCommand(input, tasks, guiUi);
-                Storage.saveTasks(tasks);
-                response = capturedOutput.toString();
-            } catch (IllegalArgumentException e) {
-                response = "❌ Invalid date format! Please use yyyy-MM-dd HHmm.\n";
-            } catch (MontyException e) {
-                response = "❌ " + e.getMessage();
-            }
+            Parser.processCommand(input, tasks, guiUi);
+            Storage.saveTasks(tasks);
+            response = capturedOutput.toString();
 
+        } catch (IllegalArgumentException e) {
+            response = "❌ Invalid date format! Please use yyyy-MM-dd HHmm.\n";
+        } catch (MontyException e) {
+            response = "❌ " + e.getMessage();
         } catch (Exception e) {
             response = "❌ An unexpected error occurred.";
             e.printStackTrace();
@@ -163,6 +169,7 @@ public class MainWindow {
         appendToDialog("Monty", response);
         userInput.clear();
     }
+
 
     private void appendToDialog(String sender, String message) {
         DialogBox dialogBox;
