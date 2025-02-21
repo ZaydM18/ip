@@ -1,11 +1,10 @@
 package monty.ui;
 
+import monty.task.Task;
+
 import java.util.Scanner;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-
-import monty.task.Task;
 
 /**
  * Handles user interactions, including displaying messages and reading user input.
@@ -140,7 +139,8 @@ public class Ui {
      * @param tasks The list of tasks scheduled for that date.
      */
     public void showTasksForDate(LocalDate date, java.util.List<Task> tasks) {
-        System.out.println(" Here are the deadlines and events on " + date.format(DateTimeFormatter.ofPattern("MMM dd yyyy")) + ":");
+        System.out.println(" Here are the deadlines and events on "
+                + date.format(DateTimeFormatter.ofPattern("MMM dd yyyy")) + ":");
         for (Task task : tasks) {
             System.out.println("  " + task);
         }

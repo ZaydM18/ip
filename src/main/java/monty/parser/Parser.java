@@ -4,6 +4,7 @@ import monty.exception.MontyException;
 import monty.storage.Storage;
 import monty.task.*;
 import monty.ui.Ui;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -20,8 +21,8 @@ public class Parser {
      * Processes the user input and executes the corresponding command.
      *
      * @param userInput The input string entered by the user.
-     * @param tasks The list of tasks currently stored.
-     * @param ui The user interface for displaying messages.
+     * @param tasks     The list of tasks currently stored.
+     * @param ui        The user interface for displaying messages.
      * @throws MontyException If an invalid command is entered or required arguments are missing.
      */
     public static void processCommand(String userInput, ArrayList<Task> tasks, Ui ui) throws MontyException {
@@ -30,91 +31,94 @@ public class Parser {
         String argument = words.length > 1 ? words[1].trim() : "";
 
         switch (command) {
-            case "bye": {
-                ui.showGoodbye();
-                Storage.saveTasks(tasks);
-                return;
+        case "bye": {
+            ui.showGoodbye();
+            Storage.saveTasks(tasks);
+            return;
+        }
+
+        case "list": {
+            ui.showTaskList(tasks);
+            break;
+        }
+
+        case "mark": {
+            int markIndex = validateTaskIndex(argument, tasks.size());
+            tasks.get(markIndex).markAsDone();
+            ui.showTaskMarked(tasks.get(markIndex));
+            Storage.saveTasks(tasks);
+            break;
+        }
+
+        case "unmark": {
+            int unmarkIndex = validateTaskIndex(argument, tasks.size());
+            tasks.get(unmarkIndex).markAsNotDone();
+            ui.showTaskUnmarked(tasks.get(unmarkIndex));
+            Storage.saveTasks(tasks);
+            break;
+        }
+
+        case "todo": {
+            if (argument.isEmpty()) {
+                throw new MontyException(
+                        "Huh? You just left that description blank, friend. How can one make a list with this?");
             }
 
-            case "list": {
-                ui.showTaskList(tasks);
-                break;
+            Task newToDo = new ToDo(argument);
+            tasks.add(newToDo);
+            ui.showTaskAdded(newToDo, tasks.size());
+            Storage.saveTasks(tasks);
+            break;
+        }
+
+        case "deadline": {
+            if (!argument.contains(" /by ")) {
+                throw new MontyException(
+                        "Deadlines must include a '/by' followed by a date and time (yyyy-MM-dd HHmm).");
             }
 
-            case "mark": {
-                int markIndex = validateTaskIndex(argument, tasks.size());
-                tasks.get(markIndex).markAsDone();
-                ui.showTaskMarked(tasks.get(markIndex));
-                Storage.saveTasks(tasks);
-                break;
+            String[] deadlineParts = argument.split(" /by ", 2);
+            Task newDeadline = new Deadline(deadlineParts[0], deadlineParts[1]);
+            tasks.add(newDeadline);
+            ui.showTaskAdded(newDeadline, tasks.size());
+            Storage.saveTasks(tasks);
+            break;
+        }
+
+        case "event": {
+            if (!argument.contains(" /from ") || !argument.contains(" /to ")) {
+                throw new MontyException(
+                        "Events must include '/from' and '/to' with a date and time (yyyy-MM-dd HHmm).");
             }
 
-            case "unmark": {
-                int unmarkIndex = validateTaskIndex(argument, tasks.size());
-                tasks.get(unmarkIndex).markAsNotDone();
-                ui.showTaskUnmarked(tasks.get(unmarkIndex));
-                Storage.saveTasks(tasks);
-                break;
-            }
+            String[] eventParts = argument.split(" /from | /to ", 3);
+            Task newEvent = new Event(eventParts[0], eventParts[1], eventParts[2]);
+            tasks.add(newEvent);
+            ui.showTaskAdded(newEvent, tasks.size());
+            Storage.saveTasks(tasks);
+            break;
+        }
 
-            case "todo": {
-                if (argument.isEmpty()) {
-                    throw new MontyException("Huh? You just left that description blank, friend. How can one make a list with this?");
-                }
+        case "date": {
+            processDateCommand(argument, tasks, ui);
+            break;
+        }
 
-                Task newToDo = new ToDo(argument);
-                tasks.add(newToDo);
-                ui.showTaskAdded(newToDo, tasks.size());
-                Storage.saveTasks(tasks);
-                break;
-            }
+        case "delete": {
+            int deleteIndex = validateTaskIndex(argument, tasks.size());
+            Task removedTask = tasks.remove(deleteIndex);
+            ui.showTaskDeleted(removedTask, tasks.size());
+            Storage.saveTasks(tasks);
+            break;
+        }
 
-            case "deadline": {
-                if (!argument.contains(" /by ")) {
-                    throw new MontyException("Deadlines must include a '/by' followed by a date and time (yyyy-MM-dd HHmm).");
-                }
+        case "find":
+            processFindCommand(argument, tasks, ui);
+            break;
 
-                String[] deadlineParts = argument.split(" /by ", 2);
-                Task newDeadline = new Deadline(deadlineParts[0], deadlineParts[1]);
-                tasks.add(newDeadline);
-                ui.showTaskAdded(newDeadline, tasks.size());
-                Storage.saveTasks(tasks);
-                break;
-            }
-
-            case "event": {
-                if (!argument.contains(" /from ") || !argument.contains(" /to ")) {
-                    throw new MontyException("Events must include '/from' and '/to' with a date and time (yyyy-MM-dd HHmm).");
-                }
-
-                String[] eventParts = argument.split(" /from | /to ", 3);
-                Task newEvent = new Event(eventParts[0], eventParts[1], eventParts[2]);
-                tasks.add(newEvent);
-                ui.showTaskAdded(newEvent, tasks.size());
-                Storage.saveTasks(tasks);
-                break;
-            }
-
-            case "date": {
-                processDateCommand(argument, tasks, ui);
-                break;
-            }
-
-            case "delete": {
-                int deleteIndex = validateTaskIndex(argument, tasks.size());
-                Task removedTask = tasks.remove(deleteIndex);
-                ui.showTaskDeleted(removedTask, tasks.size());
-                Storage.saveTasks(tasks);
-                break;
-            }
-
-            case "find":
-                processFindCommand(argument, tasks, ui);
-                break;
-
-            default: {
-                throw new MontyException("What are you saying? Please tell me again. I must add it to the list!");
-            }
+        default: {
+            throw new MontyException("What are you saying? Please tell me again. I must add it to the list!");
+        }
         }
     }
 
@@ -146,7 +150,8 @@ public class Parser {
                     matchingTasks.add(task);
                 } else if (task instanceof Event) {
                     Event e = (Event) task;
-                    if (e.getStartDate().toLocalDate().equals(targetDate) || e.getEndDate().toLocalDate().equals(targetDate)) {
+                    if (e.getStartDate().toLocalDate().equals(targetDate)
+                            || e.getEndDate().toLocalDate().equals(targetDate)) {
                         matchingTasks.add(task);
                     }
                 }
@@ -187,7 +192,6 @@ public class Parser {
             return;
         }
 
-        // Convert ArrayList to an array and pass it to showFoundTasks
         ui.showFoundTasks(matchingTasks.toArray(new Task[0]));
     }
 

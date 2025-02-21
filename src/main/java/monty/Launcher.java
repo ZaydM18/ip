@@ -1,7 +1,8 @@
 package monty;
 
-import javafx.application.Application;
 import monty.ui.Main;
+
+import javafx.application.Application;
 
 /**
  * Launches the GUI for Monty.
