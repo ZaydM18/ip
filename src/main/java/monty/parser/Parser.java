@@ -117,7 +117,7 @@ public class Parser {
             break;
 
         case "sort":
-            processSortCommand(argument, tasks, ui);
+            processSortCommand(tasks, ui);
             break;
 
         default: {
@@ -208,43 +208,47 @@ public class Parser {
      * @param ui The UI component to display the sorted list.
      * @throws MontyException If an invalid sorting category is provided.
      */
-    private static void processSortCommand(String argument, ArrayList<Task> tasks, Ui ui) throws MontyException {
-        switch (argument) {
-        case "deadline":
-            tasks.sort((task1, task2) -> {
-                if (task1 instanceof Deadline && task2 instanceof Deadline) {
-                    return Deadline.comparator.compare((Deadline) task1, (Deadline) task2);
-                }
-                return 0;
-            });
-            ui.showSortedTasks(tasks, "Deadlines sorted chronologically.");
-            break;
+    /**
+     * Sorts tasks by first grouping them into categories (Todo, Deadline, Event),
+     * then sorting within those groups, and finally merging them in order:
+     * ToDo → Deadline → Event.
+     *
+     * @param tasks The list of tasks to be sorted.
+     * @param ui The UI component to display the sorted list.
+     */
+    private static void processSortCommand(ArrayList<Task> tasks, Ui ui) {
+        ArrayList<ToDo> todos = new ArrayList<>();
+        ArrayList<Deadline> deadlines = new ArrayList<>();
+        ArrayList<Event> events = new ArrayList<>();
 
-        case "event":
-            tasks.sort((task1, task2) -> {
-                if (task1 instanceof Event && task2 instanceof Event) {
-                    return Event.comparator.compare((Event) task1, (Event) task2);
-                }
-                return 0;
-            });
-            ui.showSortedTasks(tasks, "Events sorted chronologically.");
-            break;
-
-        case "todo":
-            tasks.sort((task1, task2) -> {
-                if (task1 instanceof ToDo && task2 instanceof ToDo) {
-                    return ToDo.comparator.compare((ToDo) task1, (ToDo) task2);
-                }
-                return 0;
-            });
-            ui.showSortedTasks(tasks, "Todos sorted alphabetically.");
-            break;
-
-        default:
-            throw new MontyException("Invalid sort type. Use: sort deadline, sort event, or sort todo.");
+        for (Task task : tasks) {
+            if (task instanceof ToDo) {
+                todos.add((ToDo) task);
+            } else if (task instanceof Deadline) {
+                deadlines.add((Deadline) task);
+            } else if (task instanceof Event) {
+                events.add((Event) task);
+            }
         }
-        Storage.saveTasks(tasks);
+
+        todos.sort(ToDo.comparator);
+        deadlines.sort(Deadline.comparator);
+        events.sort(Event.comparator);
+
+        tasks.clear();
+        tasks.addAll(todos);
+        tasks.addAll(deadlines);
+        tasks.addAll(events);
+
+        ui.showSortedTasks(tasks, "Tasks sorted: ToDo → Deadline → Event.");
+
+        try {
+            Storage.saveTasks(tasks);
+        } catch (MontyException e) {
+            ui.showError("⚠ Error saving sorted tasks.");
+        }
     }
+
 
 
 }
