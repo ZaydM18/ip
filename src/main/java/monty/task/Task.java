@@ -43,6 +43,7 @@ public abstract class Task {
     }
 
     public String getDescription() {
+        assert description != null : "Task description should never be null";
         return this.description;
     }
 
@@ -69,6 +70,7 @@ public abstract class Task {
      */
     @Override
     public String toString() {
+        assert description != null : "Task description should never be null";
         return "[" + getStatusIcon() + "] " + description;
     }
 }

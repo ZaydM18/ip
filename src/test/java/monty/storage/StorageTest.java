@@ -1,5 +1,6 @@
 package monty.storage;
 
+import monty.exception.MontyException;
 import monty.task.Task;
 import monty.task.ToDo;
 import org.junit.jupiter.api.Test;
@@ -8,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class StorageTest {
     @Test
-    public void testSaveAndLoadTasks() {
+    public void testSaveAndLoadTasks() throws MontyException {
         ArrayList<Task> tasks = new ArrayList<>();
         tasks.add(new ToDo("Test saving"));
 

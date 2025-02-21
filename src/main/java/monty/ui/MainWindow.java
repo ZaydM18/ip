@@ -43,6 +43,10 @@ public class MainWindow {
      */
     @FXML
     public void setMonty(Monty monty, Image userImage, Image montyImage) {
+        assert monty != null : "Monty instance should not be null";
+        assert userImage != null : "User image should not be null";
+        assert montyImage != null : "Monty image should not be null";
+
         this.monty = monty;
         this.userImage = userImage;
         this.montyImage = montyImage;

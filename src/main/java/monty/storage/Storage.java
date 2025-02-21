@@ -52,6 +52,9 @@ public class Storage {
     public static ArrayList<Task> loadTasks() throws MontyException {
         ArrayList<Task> tasks = new ArrayList<>();
         File file = new File(FILE_PATH);
+
+        assert FILE_PATH != null : "File path should not be null";
+
         if (!file.exists()) {
             return tasks;
         }
@@ -64,6 +67,9 @@ public class Storage {
         } catch (IOException e) {
             throw new MontyException("Error loading tasks.");
         }
+
+        assert tasks != null : "Task list should not be null after loading";
+        assert tasks.size() >= 0 : "Task list should never have a negative size";
 
         return tasks;
     }
