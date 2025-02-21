@@ -39,7 +39,8 @@ public class Event extends Task {
         try {
             return LocalDateTime.parse(dateTime, INPUT_FORMAT);
         } catch (DateTimeParseException e) {
-            throw new IllegalArgumentException(" Invalid date format! Please use yyyy-MM-dd HHmm (e.g., 2024-05-30 1800).");
+            throw new IllegalArgumentException(
+                    " Invalid date format! Please use yyyy-MM-dd HHmm (e.g., 2024-05-30 1800).");
         }
     }
 
@@ -69,7 +70,8 @@ public class Event extends Task {
      */
     @Override
     public String toFileString() {
-        return "E | " + (isDone ? "1" : "0") + " | " + description + " | " + from.format(INPUT_FORMAT) + " | " + to.format(INPUT_FORMAT);
+        return "E | " + (isDone ? "1" : "0") + " | " + description + " | "
+                + from.format(INPUT_FORMAT) + " | " + to.format(INPUT_FORMAT);
     }
 
     /**
@@ -79,6 +81,7 @@ public class Event extends Task {
      */
     @Override
     public String toString() {
-        return "[E]" + super.toString() + " (from: " + from.format(OUTPUT_FORMAT) + " to: " + to.format(OUTPUT_FORMAT) + ")";
+        return "[E]" + super.toString() + " (from: " + from.format(OUTPUT_FORMAT)
+                + " to: " + to.format(OUTPUT_FORMAT) + ")";
     }
 }

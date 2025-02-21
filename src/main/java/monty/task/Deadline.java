@@ -35,7 +35,8 @@ public class Deadline extends Task {
         try {
             return LocalDateTime.parse(dateTime, INPUT_FORMAT);
         } catch (DateTimeParseException e) {
-            throw new IllegalArgumentException(" Invalid date format! Please use yyyy-MM-dd HHmm (e.g., 2024-05-30 1800).");
+            throw new IllegalArgumentException(
+                    " Invalid date format! Please use yyyy-MM-dd HHmm (e.g., 2024-05-30 1800).");
         }
     }
 
@@ -66,6 +67,7 @@ public class Deadline extends Task {
      */
     @Override
     public String toString() {
-        return "[D]" + super.toString() + " (by: " + by.format(OUTPUT_FORMAT) + ")";
+        return "[D]" + super.toString()
+                + " (by: " + by.format(OUTPUT_FORMAT) + ")";
     }
 }
