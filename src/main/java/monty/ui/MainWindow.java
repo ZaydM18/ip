@@ -107,7 +107,8 @@ public class MainWindow {
                 @Override
                 public void showTaskAdded(Task task, int size) {
                     capturedOutput.append("✔ Task added: ").append(task.toString()).append("\n")
-                            .append("Now you have ").append(size).append(" tasks in the list.\n");
+                            .append("Now you have ").append(size).append(" tasks in the list.\n")
+                            .append("But what will you do about them?");
                 }
 
                 @Override
@@ -118,12 +119,14 @@ public class MainWindow {
 
                 @Override
                 public void showTaskMarked(Task task) {
-                    capturedOutput.append("✅ Task marked as done: ").append(task.toString()).append("\n");
+                    capturedOutput.append("✅ Task marked as done: ").append(task.toString()).append("\n")
+                            .append("Impressive, you're more powerful than I expected.");
                 }
 
                 @Override
                 public void showTaskUnmarked(Task task) {
-                    capturedOutput.append("🔄 Task marked as not done: ").append(task.toString()).append("\n");
+                    capturedOutput.append("🔄 Task marked as not done: ").append(task.toString()).append("\n")
+                            .append("It's not like you to leave business unfinished...").append("\n");
                 }
 
                 @Override
@@ -138,7 +141,8 @@ public class MainWindow {
                 @Override
                 public void showNoTasksFoundForDate() {
                     capturedOutput
-                            .append("📅 No deadlines or events found on this date. Maybe you should make some?\n");
+                            .append("📅 No deadlines or events found on this date. "
+                                    + "Maybe you should make a date with destiny?\n");
                 }
 
                 @Override
@@ -173,7 +177,7 @@ public class MainWindow {
 
                 @Override
                 public void showGoodbye() {
-                    capturedOutput.append("👋 Bye. Hope to see you again soon!\n");
+                    capturedOutput.append("👋 Bye. Hope to see you again soon! Don't keep me waiting... Cloud. \n");
                 }
 
                 @Override

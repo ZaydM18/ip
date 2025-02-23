@@ -15,8 +15,8 @@ import javafx.scene.image.Image;
  */
 public class Main extends Application {
     private Monty monty;
-    private Image userImage = new Image(this.getClass().getResourceAsStream("/images/DaUser.jpg"));
-    private Image montyImage = new Image(this.getClass().getResourceAsStream("/images/DaDuke.png"));
+    private Image userImage = new Image(this.getClass().getResourceAsStream("/images/Cloud.jpg"));
+    private Image montyImage = new Image(this.getClass().getResourceAsStream("/images/Sephiroth.png"));
 
     @Override
     public void start(Stage stage) throws IOException {

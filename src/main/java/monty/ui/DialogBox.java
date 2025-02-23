@@ -49,9 +49,9 @@ public class DialogBox extends HBox {
         )));
 
         profileImage = new ImageView(img);
-        profileImage.setFitWidth(60);
-        profileImage.setFitHeight(60);
-        profileImage.setClip(new Rectangle(60, 60));
+        profileImage.setFitWidth(70);
+        profileImage.setFitHeight(70);
+        profileImage.setClip(new Rectangle(70, 70));
 
         StackPane messageContainer = new StackPane(messageLabel);
         messageContainer.setMaxWidth(320);

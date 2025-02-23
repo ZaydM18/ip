@@ -25,7 +25,7 @@ public class Ui {
      */
     public void showWelcome() {
         showLine();
-        System.out.println(" Hello! I'm Monty");
+        System.out.println(" Strange... I find myself in this new bo- Hello! I'm Monty!");
         System.out.println(" What can I do for you?");
         showLine();
     }
@@ -34,7 +34,7 @@ public class Ui {
      * Displays the goodbye message when the program exits.
      */
     public void showGoodbye() {
-        System.out.println(" Bye. Hope to see you again soon!");
+        System.out.println(" Bye. Hope to see you again soon! Don't keep me waiting...");
     }
 
     /**
@@ -79,7 +79,7 @@ public class Ui {
     public void showTaskAdded(Task task, int size) {
         System.out.println(" Got it. I've added this task:");
         System.out.println("   " + task);
-        System.out.println("  Now you have " + size + " tasks in the list.");
+        System.out.println("  Now you have " + size + " tasks in the list. What will you do about them?");
     }
 
     /**
@@ -102,6 +102,7 @@ public class Ui {
     public void showTaskMarked(Task task) {
         System.out.println(" Nice! I've marked this task as done:");
         System.out.println("   " + task);
+        System.out.println(" Impressive, you're more powerful than I expected.");
     }
 
     /**
@@ -112,6 +113,7 @@ public class Ui {
     public void showTaskUnmarked(Task task) {
         System.out.println(" OK, I've marked this task as not done yet:");
         System.out.println("   " + task);
+        System.out.println(" It's not like you to leave business unfinished...");
     }
 
     /**
