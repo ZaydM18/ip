@@ -180,4 +180,14 @@ public class Ui {
         }
     }
 
+    /**
+     * Displays a general message to the user.
+     *
+     * @param message The message to be displayed.
+     */
+    public void showMessage(String message) {
+        System.out.println(message);
+    }
+
+
 }

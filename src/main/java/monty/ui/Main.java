@@ -1,10 +1,8 @@
 package monty.ui;
 
 import monty.Monty;
-import monty.task.Task;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -17,14 +15,12 @@ import javafx.scene.image.Image;
  */
 public class Main extends Application {
     private Monty monty;
-    private ArrayList<Task> tasks;
     private Image userImage = new Image(this.getClass().getResourceAsStream("/images/DaUser.jpg"));
     private Image montyImage = new Image(this.getClass().getResourceAsStream("/images/DaDuke.png"));
 
     @Override
     public void start(Stage stage) throws IOException {
         monty = new Monty();
-        tasks = new ArrayList<>();
 
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/MainWindow.fxml"));
         Scene scene = new Scene(fxmlLoader.load());

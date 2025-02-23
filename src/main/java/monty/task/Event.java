@@ -65,9 +65,15 @@ public class Event extends Task {
     }
 
     /**
-     * Comparator for sorting {@code Event} tasks chronologically by start date.
+     * Comparator for sorting {@code Event} tasks chronologically.
+     * If two events have the same start time, they are sorted by their end time.
+     * Events that start earlier will appear first, and if the start times are the same,
+     * the event that ends earlier will be prioritized.
      */
-    public static final Comparator<Event> comparator = Comparator.comparing(Event::getStartDate);
+
+    public static final Comparator<Event> comparator = Comparator
+            .comparing(Event::getStartDate)
+            .thenComparing(Event::getEndDate);
 
     /**
      * Returns a formatted string representation of the event task

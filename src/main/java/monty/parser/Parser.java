@@ -17,6 +17,8 @@ import java.util.ArrayList;
  */
 public class Parser {
 
+    private static Task pendingDeletionTask = null;
+
     /**
      * Processes the user input and executes the corresponding command.
      *
@@ -105,23 +107,64 @@ public class Parser {
         }
 
         case "delete": {
+            if (argument.isEmpty()) {
+                throw new MontyException("Please specify a task number to delete.");
+            }
+
             int deleteIndex = validateTaskIndex(argument, tasks.size());
-            Task removedTask = tasks.remove(deleteIndex);
-            ui.showTaskDeleted(removedTask, tasks.size());
-            Storage.saveTasks(tasks);
+            pendingDeletionTask = tasks.get(deleteIndex);
+
+            ui.showMessage("Are you sure you want to delete this task?\n"
+                    + pendingDeletionTask + "\nType 'confirm delete' to proceed.");
             break;
         }
 
-        case "find":
+        case "find": {
             processFindCommand(argument, tasks, ui);
             break;
+        }
 
-        case "sort":
+        case "sort": {
             processSortCommand(tasks, ui);
             break;
+        }
+
+        case "clear": {
+            if (!argument.isEmpty()) {
+                throw new MontyException("To delete specific tasks, use the delete command (e.g., delete 1).");
+            }
+
+            ui.showMessage("⚠ Are you sure you want to clear all tasks? "
+                    + "Don't just erase my precious list willy-nilly! "
+                    + "Type 'confirm clear' to proceed.");
+
+            break;
+        }
+
+        case "confirm": {
+            if (argument.equals("clear")) {
+                tasks.clear();
+                Storage.saveTasks(tasks);
+                ui.showMessage("✅ All tasks have been cleared!");
+            } else if (argument.equals("delete")) {
+                if (pendingDeletionTask != null) {
+                    tasks.remove(pendingDeletionTask);
+                    Storage.saveTasks(tasks);
+                    ui.showTaskDeleted(pendingDeletionTask, tasks.size());
+                    pendingDeletionTask = null;
+                } else {
+                    throw new MontyException("No pending task deletion found.");
+                }
+            } else {
+                throw new MontyException("Invalid confirmation command.");
+            }
+            break;
+        }
+
 
         default: {
-            throw new MontyException("What are you saying? Please tell me again. I must add it to the list!");
+            throw new MontyException(
+                    "Sorry, did you say that right? If not, please, do correct yourself! The list must expand!");
         }
 
         }
@@ -129,17 +172,23 @@ public class Parser {
 
     private static int validateTaskIndex(String argument, int size) throws MontyException {
         if (argument.isEmpty()) {
-            throw new MontyException(" Your task number is out of range!");
+            throw new MontyException("You must specify a task number.");
         }
 
-        int index = Integer.parseInt(argument) - 1;
-
-        if (index < 0 || index >= size) {
-            throw new MontyException(" Your task number is out of range!");
+        int index;
+        try {
+            index = Integer.parseInt(argument.trim());
+        } catch (NumberFormatException e) {
+            throw new MontyException("Invalid task number! Please enter a valid integer.");
         }
 
-        return index;
+        if (index <= 0 || index > size) {
+            throw new MontyException("Task number must be between 1 and " + size + ".");
+        }
+
+        return index - 1;
     }
+
 
     private static void processDateCommand(String argument, ArrayList<Task> tasks, Ui ui) throws MontyException {
         if (argument.isEmpty()) {
@@ -201,14 +250,6 @@ public class Parser {
     }
 
     /**
-     * Sorts tasks based on the specified category (deadline, event, todo).
-     *
-     * @param argument The sorting category (deadline, event, or todo).
-     * @param tasks The list of tasks to be sorted.
-     * @param ui The UI component to display the sorted list.
-     * @throws MontyException If an invalid sorting category is provided.
-     */
-    /**
      * Sorts tasks by first grouping them into categories (Todo, Deadline, Event),
      * then sorting within those groups, and finally merging them in order:
      * ToDo → Deadline → Event.
@@ -240,7 +281,8 @@ public class Parser {
         tasks.addAll(deadlines);
         tasks.addAll(events);
 
-        ui.showSortedTasks(tasks, "Tasks sorted: ToDo → Deadline → Event.");
+        ui.showSortedTasks(tasks, "Tasks sorted: ToDo → Deadline → Event. "
+                + "An organised list is the best list!");
 
         try {
             Storage.saveTasks(tasks);

@@ -175,6 +175,12 @@ public class MainWindow {
                 public void showGoodbye() {
                     capturedOutput.append("👋 Bye. Hope to see you again soon!\n");
                 }
+
+                @Override
+                public void showMessage(String message) {
+                    capturedOutput.append(message).append("\n");
+                }
+
             };
 
             Parser.processCommand(input, tasks, guiUi);
