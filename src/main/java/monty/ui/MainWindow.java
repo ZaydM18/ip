@@ -191,6 +191,21 @@ public class MainWindow {
             Storage.saveTasks(tasks);
             response = capturedOutput.toString();
 
+            if (input.equalsIgnoreCase("bye")) {
+                appendToDialog("Monty", response);
+                userInput.clear();
+
+                new Thread(() -> {
+                    try {
+                        Thread.sleep(3000);
+                        javafx.application.Platform.exit();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }).start();
+                return;
+            }
+
         } catch (IllegalArgumentException e) {
             response = "❌ Invalid date format! Please use yyyy-MM-dd HHmm.\n";
         } catch (MontyException e) {

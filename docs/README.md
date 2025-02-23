@@ -2,7 +2,7 @@
 > *"Don't deny me. Whoops, I meant to say 'Hi, there!'"*
 
 ## Overview
-![Ui.png](Ui.png)
+![Ui.png](../build/resources/Ui.png)
 
 Have you struggled with keeping track of everything going on in your life? Wouldn't it be nice to have a task manager that could help you sort all of that out?
 
