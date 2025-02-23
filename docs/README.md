@@ -2,7 +2,8 @@
 > *"Don't deny me. Whoops, I meant to say 'Hi, there!'"*
 
 ## Overview
-![Ui.png](Ui.png)
+![UI Image](https://github.com/user-attachments/assets/74b5f33e-01b3-4139-90fa-43704035fc35)
+
 
 Have you struggled with keeping track of everything going on in your life? Wouldn't it be nice to have a task manager that could help you sort all of that out?
 
