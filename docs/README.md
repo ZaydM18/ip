@@ -91,6 +91,7 @@ mark 1
 And what you'll see is:
 ```
 ✅ Task marked as done: [T][X] Wash the dishes
+Impressive, you're more powerful than I expected.
 ```
 
 
@@ -101,6 +102,7 @@ unmark 1
 Similarly, you should see: 
 ```
 🔄 Task marked as not done: [T][ ] Wash the dishes
+It's not like you to leave business unfinished...
 
 ```
 
