@@ -206,10 +206,12 @@ Here's a full list of commands for Monty:
 11. ``` find *keyword*```
 12. ```date YYYY-MM-dd ```
 13. ``` sort```
-14. ``` bye ```
+14. ``` help ```
+15. ``` bye ```
 
-The last command ``` bye ``` will simply let you exit Monty's
-grasp. Though, you can also close the bot directly from the 
+There are two commands that haven't been discussed yet. ``` help``` will 
+provide the user with a link to this README and``` bye ``` will simply let you exit Monty's
+program. Though, you can also close the bot directly from the 
 user interface. If you make a mistake while typing in one of 
 the commands, Monty should be able to offer you some guidance.
 If not, you may always refer to this guide. 

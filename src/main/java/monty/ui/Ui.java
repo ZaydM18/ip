@@ -191,5 +191,14 @@ public class Ui {
         System.out.println(message);
     }
 
+    /**
+     * Displays a help message with a link for users to visit if they need assistance.
+     * The message is indirectly printed to the console.
+     */
+    public void showHelp() {
+        this.showMessage("For a full list of commands, visit: https://zaydm18.github.io/ip/");
+    }
+
+
 
 }

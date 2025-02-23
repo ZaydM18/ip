@@ -15,9 +15,9 @@ import javafx.fxml.FXML;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 import javafx.scene.image.Image;
+import javafx.application.Platform;
 
 
 /**
@@ -27,8 +27,6 @@ public class MainWindow {
     @FXML
     private TextField userInput;
 
-    @FXML
-    private Button sendButton;
 
     @FXML
     private VBox dialogContainer;
@@ -185,6 +183,12 @@ public class MainWindow {
                     capturedOutput.append(message).append("\n");
                 }
 
+                @Override
+                public void showHelp() {
+                    capturedOutput.append(" For a full list of commands, visit: https://zaydm18.github.io/ip/\n");
+                }
+
+
             };
 
             Parser.processCommand(input, tasks, guiUi);
@@ -195,16 +199,10 @@ public class MainWindow {
                 appendToDialog("Monty", response);
                 userInput.clear();
 
-                new Thread(() -> {
-                    try {
-                        Thread.sleep(3000);
-                        javafx.application.Platform.exit();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }).start();
+                exitAfterDelay();
                 return;
             }
+
 
         } catch (IllegalArgumentException e) {
             response = "❌ Invalid date format! Please use yyyy-MM-dd HHmm.\n";
@@ -233,4 +231,18 @@ public class MainWindow {
         dialogContainer.getChildren().add(dialogBox);
         scrollPane.vvalueProperty().bind(dialogContainer.heightProperty());
     }
+
+    private void exitAfterDelay() {
+        new Thread(() -> {
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                System.err.println("Thread interrupted while waiting to exit: " + e.getMessage());
+            } finally {
+                Platform.exit();
+            }
+        }).start();
+    }
+
 }

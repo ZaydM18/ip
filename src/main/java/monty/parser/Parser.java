@@ -161,8 +161,12 @@ public class Parser {
             break;
         }
 
+            case "help": {
+                ui.showHelp();
+                break;
+            }
 
-        default: {
+            default: {
             throw new MontyException(
                     "Sorry, did you say that right? If not, please, do correct yourself! The list must expand!");
         }
